@@ -1,0 +1,48 @@
+version: '3.7'
+
+networks:
+  appweb-nest-network:
+    name: appweb-nest-network
+    driver: bridge
+
+services:
+  appweb-nest-database:
+    image: postgres:9.6
+    container_name: appweb-nest-database
+    ports:
+      - 5432:5432
+    networks:
+      - appweb-nest-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=appweb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 15s
+      timeout: 15s
+      retries: 5
+      start_period: 15s
+    volumes: 
+      - ./var/pgdata:/var/lib/postgresql/data
+
+  appweb-nest-backend:
+    image: node:16-alpine3.16
+    container_name: appweb-nest-backend
+    volumes:
+      - ./:/var/www/server
+    ports: 
+      - 3344:3344
+      - 5555:5555
+    working_dir: /var/www/server
+    stdin_open: true
+    tty: true
+    environment:
+      - SECRET=bg4qmvQldjH
+      - DATABASE_URL=postgresql://postgres:postgres@appweb-nest-database:5432/appweb
+    networks:
+      - appweb-nest-network
+    depends_on:
+      appweb-nest-database:
+        condition: service_healthy
+    entrypoint: sh -c "npm install && npm run start:dev"
