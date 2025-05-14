@@ -21,10 +21,12 @@ import { join } from 'path';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    ThrottlerModule.forRoot({
-      ttl: 1,
-      limit: 3,
-    }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // Tempo em milissegundos (1 minuto)
+        limit: 3,    // Número máximo de requisições no período
+      },
+    ]),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'upload/documents'),
     }),
