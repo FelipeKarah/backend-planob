@@ -8,7 +8,7 @@ export class CreateProductService {
   constructor(private prismaService: PrismaService) {}
 
   // Lida com conversões e decide se deve criar ou atualizar os produtos
-  async execute(createProductDto: CreateProductDto[],  fileName: string): Promise<void> {
+  async execute(createProductDto: CreateProductDto[]): Promise<void> {
     try {
 
 
@@ -69,9 +69,7 @@ export class CreateProductService {
 
     } catch (err) {
 
-      fs.unlinkSync(
-        `./${process.env.DESTINATION_DOCUMENT_UPLOAD}/products/${fileName}`,
-      );
+     
       console.error('Error creating/updating product:', err); // Log para debugging
       throw new HttpException('Error creating/updating product', 400);
     }

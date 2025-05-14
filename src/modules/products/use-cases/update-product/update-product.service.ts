@@ -14,7 +14,6 @@ export class UpdateProductService {
     fileName: string,
   ): Promise<Product> {
     try {
-      const existingImageName = await this.getImageNameById(id);
   
       // Converter todos os campos numéricos para Float
       const numericFields = [
@@ -47,20 +46,11 @@ export class UpdateProductService {
         }
       });
   
-      console.log('Dados transformados:', transformedData);
-  
       const product = await this.prismaService.product.update({
         data: transformedData,
         where: { id },
       });
   
-      console.log('Atualização concluída com sucesso');
-  
-      if (existingImageName?.image) {
-        fs.unlinkSync(
-          `./${process.env.DESTINATION_DOCUMENT_UPLOAD}/products/${existingImageName.image}`,
-        );
-      }
   
       return new Product(product);
     } catch (err) {

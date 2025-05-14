@@ -5,6 +5,7 @@ import { JwtAuthGuard } from 'src/helpers/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/helpers/guards/roles.guard';
 import { FindAllProductsService } from './find-all-product.service';
 import { ApiTags } from '@nestjs/swagger';
+import { UserRoleEnum } from 'src/utils/enums/user-role.enum';
 
 @Controller()
 export class FindAllProductsController {
@@ -13,6 +14,7 @@ export class FindAllProductsController {
   ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRoleEnum.ADMIN)
   @ApiTags('Products')
   @Get('/products')
   handle(@Query() filters: { name?: string; type?: string }) {
