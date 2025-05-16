@@ -30,8 +30,8 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   // running
-  await app.listen(3344, () => {
-    console.log('Server running on port 3344!');
+  await app.listen(8080, () => {
+    console.log('Server running on port 8080!');
   });
 }
 bootstrap();

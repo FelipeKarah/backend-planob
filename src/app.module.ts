@@ -23,8 +23,8 @@ import { join } from 'path';
     }),
     ThrottlerModule.forRoot([
       {
-        ttl: 60000, // Tempo em milissegundos (1 minuto)
-        limit: 3,    // Número máximo de requisições no período
+        ttl: 60000,
+        limit: 20,    
       },
     ]),
     ServeStaticModule.forRoot({
